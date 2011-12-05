@@ -1,0 +1,22 @@
+{
+    "name" : "kexec", 
+    "version" : "0.0.1", 
+    "description" : "Replace your Node.js process with another process. Like Ruby exec.", 
+    "homepage" : [
+        "https://github.com/jprichardson/node-kexec"
+    ], 
+    "repository" : { 
+        "type" : "git", 
+        "url"  : "https://github.com/jprichardson/node-kexec"
+    }, 
+    "keywords" : ["exec","spawn","process"], 
+    "author" : "JP Richardson <jprichardson@gmail.com>", 
+    "licenses" : [ {"type" : "MIT" } ],  
+    "main" : "./index", 
+    "engines" : {
+        "node" : ">=0.4"
+    },
+    "scripts": { "install": "node-waf configure build" }
+}
+
+     
