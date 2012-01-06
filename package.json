@@ -1,6 +1,6 @@
 {
     "name" : "kexec", 
-    "version" : "0.0.1", 
+    "version" : "0.0.2", 
     "description" : "Replace your Node.js process with another process. Like Ruby exec.", 
     "homepage" : [
         "https://github.com/jprichardson/node-kexec"
