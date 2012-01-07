@@ -2,7 +2,7 @@ var kexec;
 
 try {
   kexec = require("./build/default/kexec.node");
-catch(e) {
+} catch(e) {
   kexec = require("./build/Release/kexec.node");
 }
 
