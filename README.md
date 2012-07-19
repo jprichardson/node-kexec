@@ -1,28 +1,35 @@
-kexec
------
+Node.js - kexec
+===============
 
-This module causes your current Node.js process to be replaced by the process invoked by the parameter of this function. It's like
-the Ruby exec function.
+This module causes your current Node.js process to be replaced by the process invoked by the parameter of this function. It's like the Ruby exec function. It currently does not work on Windows.
+
+If you want Node v0.4 or Node v0.6 compatibility, then you'll want version `0.0.3`. At this moment, it does not work on Node v0.8.
+
 
 Installation
-~~~~~~~~~~~~
+------------
 
-----
-npm install kexec
-----
+    npm install kexec
+
+
 
 Usage
-~~~~~
+-----
 
-----
+```javascript
 var kexec = require('kexec');
 
 kexec('top'); //your process now becomes top, can also accept parameters in one string
-----
+```
+
+
+
+License
+-------
 
 (The MIT License)
 
-Copyright (c) 2011 JP Richardson
+Copyright (c) 2011-2102 JP Richardson
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files 
 (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify,
