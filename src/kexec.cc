@@ -30,8 +30,9 @@ static Handle<Value> kexec(const Arguments& args) {
     clear_cloexec(0); //stdin
     clear_cloexec(1); //stdout
     clear_cloexec(2); //stderr
-    /*int err = */execvp("/bin/sh", argv);
-    return scope.Close(Undefined()); //TODO: modify this to return err code if kexec fails
+    int err = execvp("/bin/sh", argv);
+    Local<Number> num = Number::New(err);
+    return scope.Close(num/*Undefined()*/);
 }
 
 extern "C" {
