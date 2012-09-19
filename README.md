@@ -6,10 +6,18 @@ This module causes your current Node.js process to be replaced by the process in
 Fully compatible with Node.js version v0.6 and v0.8.
 
 
-Installation
+Installation Node v0.6 and v0.8
 ------------
 
-    npm install kexec
+    npm install kexec@latest
+
+
+
+Installation Node v0.4
+-------------
+
+    npm install kexec@0.0.3
+
 
 
 
