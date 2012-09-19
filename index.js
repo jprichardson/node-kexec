@@ -1,9 +1,9 @@
-var kexec;
+var kexec = null;
 
-try {
+/*try {
   kexec = require("./build/default/kexec.node");
-} catch(e) {
+} catch(e) {*/
   kexec = require("./build/Release/kexec.node");
-}
+//}
 
 module.exports = kexec.kexec; //function of kexec module is named kexec

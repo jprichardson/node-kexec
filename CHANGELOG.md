@@ -1,3 +1,7 @@
+0.1.0 / 2012-09-19
+------------------
+* Made Node v0.8 compatible.
+
 0.0.3 / 2012-01-09
 ------------------
 * Fixed typo in index.js (Matt Insler)
