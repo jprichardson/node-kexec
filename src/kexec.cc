@@ -27,7 +27,7 @@ static int clear_cloexec (int desc)
 static Handle<Value> kexec(const Arguments& args) {
 	HandleScope scope;
     String::Utf8Value v8str(args[0]);
-    char* argv[] = { const_cast<char *>(""), const_cast<char *>("-c"), *v8str, NULL};
+    char* argv[] = { const_cast<char *>("sh"), const_cast<char *>("-c"), *v8str, NULL};
 
     clear_cloexec(0); //stdin
     clear_cloexec(1); //stdout
