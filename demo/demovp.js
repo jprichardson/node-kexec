@@ -1,2 +1,2 @@
 var kexec = require('../')
-kexec('du', [ '-sh', '/etc/fstab' ] );
+kexec('less', [ '/etc/fstab' ] );
