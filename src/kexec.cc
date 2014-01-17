@@ -86,6 +86,7 @@ static Handle<Value> kexec(const Arguments& args) {
         int err = do_exec(argv);
 
         // Failed...!
+        // FIXME: It might be better to raise an exception here.
         for (int i = 0; i < argc; i++)
             free(argv[i+1]);
         delete [] argv;
