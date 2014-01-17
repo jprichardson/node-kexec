@@ -8,9 +8,9 @@ build:
 
 test:
 	$(MAKE) build
-	indir demo node demo.js
+	cd demo && node demo.js
 
 testvp:
 	$(MAKE) build
-	indir demo node demovp.js
+	cd demo && node demovp.js
 
