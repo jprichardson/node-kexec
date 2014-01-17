@@ -5,8 +5,8 @@ var exec = require('child_process').exec
 
 suite('kexec')
 
-test('+ kexec() - kexec echo - single argument', function(done) {
-   var echoFile = path.join(__dirname, './files/echo.sh'); 
+test('+ kexec() - kexec echovp - two arguments', function(done) {
+   var echoFile = path.join(__dirname, './files/echovp.sh'); 
 
     exec(echoFile, function(error, stdout, stderr) {
         assert(stdout.trim() === 'hello world');

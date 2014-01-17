@@ -1,5 +1,5 @@
 
-.PHONY: build test testvp
+.PHONY: build test demo demovp
 
 build:
 	node-gyp clean
@@ -8,9 +8,13 @@ build:
 
 test:
 	$(MAKE) build
+	mocha
+
+demo:
+	$(MAKE) build
 	cd demo && node demo.js
 
-testvp:
+demovp:
 	$(MAKE) build
 	cd demo && node demovp.js
 
