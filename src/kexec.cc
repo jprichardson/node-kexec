@@ -3,6 +3,7 @@
 #include <node.h>
 #include <cstdio>
 #include <stdlib.h>
+#include <string.h>
 
 //#ifdef __POSIX__
 #include <unistd.h>
@@ -20,7 +21,7 @@ static int clear_cloexec (int desc)
     int flags = fcntl (desc, F_GETFD, 0);
     if (flags <  0)
         return flags; //return if reading failed
-   
+
     flags &= ~FD_CLOEXEC; //clear FD_CLOEXEC bit
     return fcntl (desc, F_SETFD, flags);
 }
@@ -48,12 +49,12 @@ static Handle<Value> kexec(const Arguments& args) {
      *   - the first is the command name
      *   - the second is an array of arguments
      *     ...as in process.child_process.spawn()
-     * 
+     *
      * This approach is not great, but it allows the established usage to
      * coexist with direct execvp-usage, and avoids making any changes to the
      * established API.
      */
-    
+
     if ( 1 == args.Length() && args[0]->IsString() )
     {
         String::Utf8Value v8str(args[0]);
