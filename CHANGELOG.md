@@ -1,3 +1,7 @@
+0.2.0 / 2014-01-25
+------------------
+* API extensions, kexec(cmnd,[args]) now execvps cmd with args directly.
+
 0.1.1 / 2012-09-19
 ------------------
 * kexec now returns `exevp` error code if it fails.
