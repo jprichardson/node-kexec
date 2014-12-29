@@ -1,3 +1,7 @@
+0.2.1 / 2014-12-29
+------------------
+* Node.js v0.11 support (Foy Savas)
+
 0.2.0 / 2014-01-25
 ------------------
 * API extensions, kexec(cmnd,[args]) now execvps cmd with args directly.
