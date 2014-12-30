@@ -1,25 +1,35 @@
 {
-    "name" : "kexec", 
-    "version" : "0.2.0", 
-    "description" : "Replace your Node.js process with another process. Like Ruby exec.", 
-    "homepage" : [
-        "https://github.com/jprichardson/node-kexec"
-    ], 
-    "repository" : { 
-        "type" : "git", 
-        "url"  : "https://github.com/jprichardson/node-kexec"
-    }, 
-    "keywords" : ["exec","spawn","process", "kexec"], 
-    "author" : "JP Richardson <jprichardson@gmail.com>", 
-    "licenses" : [ {"type" : "MIT" } ],  
-    "main" : "./index", 
-    "engines" : {
-        "node" : ">=0.4"
-    },
-    "scripts": { "install": "node-gyp configure build" },
-    "devDependencies": {
-        "mocha": "*"
+  "name": "kexec",
+  "version": "0.2.0",
+  "description": "Replace your Node.js process with another process. Like Ruby exec.",
+  "homepage": [
+    "https://github.com/jprichardson/node-kexec"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jprichardson/node-kexec"
+  },
+  "keywords": [
+    "exec",
+    "spawn",
+    "process",
+    "kexec"
+  ],
+  "author": "JP Richardson <jprichardson@gmail.com>",
+  "licenses": [
+    {
+      "type": "MIT"
     }
+  ],
+  "main": "./index",
+  "engines": {
+    "node": ">=0.4"
+  },
+  "scripts": {
+    "install": "node-gyp configure build"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "dependencies": {}
 }
-
-     
