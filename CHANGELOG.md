@@ -1,3 +1,7 @@
+1.0.0 / 2014-12-29
+------------------
+- added Node 0.11 support https://github.com/jprichardson/node-kexec/pull/11
+
 0.2.0 / 2014-01-25
 ------------------
 * API extensions, kexec(cmnd,[args]) now execvps cmd with args directly.
