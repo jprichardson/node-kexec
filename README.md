@@ -3,22 +3,7 @@ Node.js - kexec
 
 This module causes your current Node.js process to be replaced by the process invoked by the parameter of this function. It's like the Ruby exec function. It currently does not work on Windows.
 
-Fully compatible with Node.js version v0.6 and v0.8.
-
-
-Installation Node v0.6 and v0.8
-------------
-
-    npm install kexec@latest
-
-
-
-Installation Node v0.4
--------------
-
-    npm install kexec@0.0.3
-
-
+Fully compatible with Node.js version v0.10 and v0.11.
 
 
 Usage
@@ -35,6 +20,7 @@ var kexec = require('kexec');
 
 kexec('du', [ '-sh', '/etc/fstab' ]); //your process now becomes du, with the arguments indicated
 ```
+
 
 Details
 -------
