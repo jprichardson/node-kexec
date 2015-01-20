@@ -8,7 +8,7 @@ build:
 
 test:
 	$(MAKE) build
-	mocha
+	./node_modules/.bin/mocha
 
 demo:
 	$(MAKE) build
