@@ -1,3 +1,8 @@
+1.1.0 / 20145-01-20
+------------------
+- dropped `node-gyp` for `pangyp`
+- `io.js` support https://github.com/jprichardson/node-kexec/issues/13
+
 1.0.0 / 2014-12-29
 ------------------
 - added Node 0.11 support https://github.com/jprichardson/node-kexec/pull/11
