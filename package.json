@@ -24,10 +24,11 @@
     "node": ">=0.10"
   },
   "scripts": {
-    "install": "node-gyp configure build"
+    "install": "pangyp configure build"
   },
   "devDependencies": {
     "mocha": "*"
+    "pangyp": "^2.0.1"
   },
   "dependencies": {}
 }

@@ -2,9 +2,9 @@
 .PHONY: build test demo demovp demovp-pids demos
 
 build:
-	node-gyp clean
-	node-gyp configure
-	node-gyp build
+	./node_modules/.bin/pangyp clean
+	./node_modules/.bin/pangyp configure
+	./node_modules/.bin/pangyp build
 
 test:
 	$(MAKE) build
