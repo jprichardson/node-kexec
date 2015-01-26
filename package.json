@@ -27,8 +27,9 @@
     "install": "pangyp configure build"
   },
   "devDependencies": {
-    "mocha": "^2.1.0",
-    "pangyp": "^2.0.1"
+    "mocha": "^2.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "pangyp": "^2.0.1"
+  }
 }
