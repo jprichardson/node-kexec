@@ -1,3 +1,7 @@
+1.1.1 / 2015-01-26
+------------------
+- move `pangyp` to dependencies
+
 1.1.0 / 20145-01-20
 ------------------
 - dropped `node-gyp` for `pangyp`
