@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __NODE_V0_11__
+#ifdef __NODE_GTE_V0_11__
 #include <fcntl.h>
 #endif
 
@@ -35,7 +35,7 @@ static int do_exec(char *argv[])
         return execvp(argv[0], argv);
 }
 
-#ifdef __NODE_V0_11__
+#ifdef __NODE_GTE_V0_11__
 static void kexec(const FunctionCallbackInfo<Value>& args) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
@@ -71,7 +71,7 @@ static Handle<Value> kexec(const Arguments& args) {
 
         int err = do_exec(argv);
 
-#ifdef __NODE_V0_11__
+#ifdef __NODE_GTE_V0_11__
         Local<Number> num = Number::New(isolate, err);
         args.GetReturnValue().Set(num);
 #else
@@ -95,7 +95,7 @@ static Handle<Value> kexec(const Arguments& args) {
         argv[0] = *v8str;
         argv[argv_length-1] = NULL;
         for (int i = 0; i < argc; i++) {
-#ifdef __NODE_V0_11__
+#ifdef __NODE_GTE_V0_11__
             String::Utf8Value arg(argv_handle->Get(Integer::New(isolate, i))->ToString());
 #else
             String::Utf8Value arg(argv_handle->Get(Integer::New(i))->ToString());
@@ -111,7 +111,7 @@ static Handle<Value> kexec(const Arguments& args) {
             free(argv[i+1]);
         delete [] argv;
 
-#ifdef __NODE_V0_11__
+#ifdef __NODE_GTE_V0_11__
         Local<Number> num = Number::New(isolate, err);
         args.GetReturnValue().Set(num);
 #else
@@ -120,7 +120,7 @@ static Handle<Value> kexec(const Arguments& args) {
 #endif
     }
 
-#ifdef __NODE_V0_11__
+#ifdef __NODE_GTE_V0_11__
     isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "kexec: invalid arguments")));
     args.GetReturnValue().Set(Undefined(isolate));
 #else
