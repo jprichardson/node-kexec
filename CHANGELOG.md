@@ -1,3 +1,7 @@
+1.2.0 / 2015-02-09
+------------------
+- Node.js v0.12 support https://github.com/jprichardson/node-kexec/pull/18
+
 1.1.1 / 2015-01-26
 ------------------
 - move `pangyp` to dependencies
