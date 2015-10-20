@@ -1,3 +1,7 @@
+1.3.0 / 2015-10-20
+------------------
+- Node.js v4 support https://github.com/jprichardson/node-kexec/pull/21
+
 1.2.0 / 2015-02-09
 ------------------
 - Node.js v0.12 support https://github.com/jprichardson/node-kexec/pull/18
