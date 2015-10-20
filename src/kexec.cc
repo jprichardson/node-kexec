@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <string.h>
-#ifdef __NODE_GTE_V0_11__
+#if defined(__NODE_V0_11_OR_12__) || defined(__NODE_V4__)
 #include <fcntl.h>
 #endif
 
@@ -35,13 +35,13 @@ static int do_exec(char *argv[])
         return execvp(argv[0], argv);
 }
 
-#ifdef __NODE_GTE_V0_11__
+#if defined(__NODE_V0_10__)
+static Handle<Value> kexec(const Arguments& args) {
+    HandleScope scope;
+#else
 static void kexec(const FunctionCallbackInfo<Value>& args) {
     Isolate* isolate = Isolate::GetCurrent();
     HandleScope scope(isolate);
-#else
-static Handle<Value> kexec(const Arguments& args) {
-    HandleScope scope;
 #endif
 
 
@@ -71,12 +71,12 @@ static Handle<Value> kexec(const Arguments& args) {
 
         int err = do_exec(argv);
 
-#ifdef __NODE_GTE_V0_11__
-        Local<Number> num = Number::New(isolate, err);
-        args.GetReturnValue().Set(num);
-#else
+#if defined(__NODE_V0_10__)
         Local<Number> num = Number::New(err);
         return scope.Close(num/*Undefined()*/);
+#else
+        Local<Number> num = Number::New(isolate, err);
+        args.GetReturnValue().Set(num);
 #endif
     }
 
@@ -95,10 +95,10 @@ static Handle<Value> kexec(const Arguments& args) {
         argv[0] = *v8str;
         argv[argv_length-1] = NULL;
         for (int i = 0; i < argc; i++) {
-#ifdef __NODE_GTE_V0_11__
-            String::Utf8Value arg(argv_handle->Get(Integer::New(isolate, i))->ToString());
+#if defined(__NODE_V0_10__)
+          String::Utf8Value arg(argv_handle->Get(Integer::New(i))->ToString());
 #else
-            String::Utf8Value arg(argv_handle->Get(Integer::New(i))->ToString());
+          String::Utf8Value arg(argv_handle->Get(Integer::New(isolate, i))->ToString());
 #endif
             argv[i+1] = strdup(*arg);
         }
@@ -111,21 +111,21 @@ static Handle<Value> kexec(const Arguments& args) {
             free(argv[i+1]);
         delete [] argv;
 
-#ifdef __NODE_GTE_V0_11__
-        Local<Number> num = Number::New(isolate, err);
-        args.GetReturnValue().Set(num);
-#else
+#if defined(__NODE_V0_10__)
         Local<Number> num = Number::New(err);
         return scope.Close(num/*Undefined()*/);
+#else
+        Local<Number> num = Number::New(isolate, err);
+        args.GetReturnValue().Set(num);
 #endif
     }
 
-#ifdef __NODE_GTE_V0_11__
-    isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "kexec: invalid arguments")));
-    args.GetReturnValue().Set(Undefined(isolate));
-#else
+#if defined(__NODE_V0_10__)
     ThrowException(Exception::TypeError(String::New("kexec: invalid arguments")));
     return scope.Close(Undefined());
+#else
+    isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "kexec: invalid arguments")));
+    args.GetReturnValue().Set(Undefined(isolate));
 #endif
 }
 

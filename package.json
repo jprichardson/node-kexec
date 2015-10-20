@@ -14,22 +14,18 @@
     "kexec"
   ],
   "author": "JP Richardson <jprichardson@gmail.com>",
-  "licenses": [
-    {
-      "type": "MIT"
-    }
-  ],
+  "license": "MIT",
   "main": "./index",
   "engines": {
     "node": ">=0.10"
   },
   "scripts": {
-    "install": "pangyp configure build"
+    "install": "node-gyp configure build"
   },
   "devDependencies": {
-    "mocha": "^2.1.0"
+    "mocha": "^2.3.3"
   },
   "dependencies": {
-    "pangyp": "^2.0.1"
+    "node-gyp": "^3.0.3"
   }
 }
