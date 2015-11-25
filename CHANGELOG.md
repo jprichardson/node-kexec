@@ -1,3 +1,7 @@
+2.0.0 / 2015-11-24
+------------------
+- removed `node-gyp` dep. In case this breaks anything, bumped major. See: https://github.com/jprichardson/node-kexec/pull/24
+
 1.3.0 / 2015-10-20
 ------------------
 - Node.js v4 support https://github.com/jprichardson/node-kexec/pull/21
