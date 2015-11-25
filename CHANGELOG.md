@@ -1,3 +1,7 @@
+2.0.1 / 2015-11-25
+------------------
+- removed incorrect references to `node-gyp`: See: https://github.com/jprichardson/node-kexec/pull/27
+
 2.0.0 / 2015-11-24
 ------------------
 - removed `node-gyp` dep. In case this breaks anything, bumped major. See: https://github.com/jprichardson/node-kexec/pull/24
