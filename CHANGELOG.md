@@ -1,3 +1,8 @@
+2.0.2 / 2015-11-27
+------------------
+- fix build in Make: See: https://github.com/jprichardson/node-kexec/pull/28
+- compatible for Node v5 See: https://github.com/jprichardson/node-kexec/pull/29
+
 2.0.1 / 2015-11-25
 ------------------
 - removed incorrect references to `node-gyp`: See: https://github.com/jprichardson/node-kexec/pull/27
