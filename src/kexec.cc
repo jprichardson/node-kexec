@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <stdlib.h>
 #include <string.h>
-#if defined(__NODE_V0_11_OR_12__) || defined(__NODE_V4__)
+#if defined(__NODE_V0_11_OR_12__) || defined(__NODE_GE_V4__)
 #include <fcntl.h>
 #endif
 
