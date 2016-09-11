@@ -42,8 +42,6 @@ static int do_exec(char *argv[])
 }
 
 NAN_METHOD(kexec) {
-    Nan::HandleScope scope;
-
     /*
      * Steve Blott: 17 Jan, 2014
      *              Temporary comment by way of explanation...
