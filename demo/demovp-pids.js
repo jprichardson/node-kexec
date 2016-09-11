@@ -1,6 +1,5 @@
 var kexec = require('../')
 
-console.log(process.pid+' - PID before exec')
+console.log(process.pid + ' - PID before exec')
 
-kexec('sh', [ '-c', 'echo "$$ - PID after exec"' ] );
-
+kexec('sh', [ '-c', 'echo "$$ - PID after exec"' ])

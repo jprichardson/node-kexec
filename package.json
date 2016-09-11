@@ -8,7 +8,9 @@
     "url": "https://github.com/jprichardson/node-kexec"
   },
   "scripts": {
-    "test": "mocha"
+    "lint": "standard",
+    "test": "npm run lint && npm run unit",
+    "unit": "mocha"
   },
   "keywords": [
     "exec",
@@ -23,7 +25,8 @@
     "node": ">=0.10"
   },
   "devDependencies": {
-    "mocha": "^2.3.3"
+    "mocha": "^2.3.3",
+    "standard": "^8.0.0"
   },
   "dependencies": {
     "nan": "^2.4.0"

@@ -3,6 +3,7 @@ Node.js - kexec
 
 [![npm Package](https://img.shields.io/npm/v/kexec.svg?style=flat-square)](https://www.npmjs.org/package/kexec)
 [![build status](https://api.travis-ci.org/jprichardson/node-kexec.svg)](http://travis-ci.org/jprichardson/node-kexec)
+[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 This module causes your current Node.js process to be replaced by the process invoked by the parameter of this function. It's like the Ruby exec function. It currently does not work on Windows.
 
@@ -12,16 +13,16 @@ Fully compatible with Node.js version v0.10 and v0.11.
 Usage
 -----
 
-```javascript
-var kexec = require('kexec');
+```js
+var kexec = require('kexec')
 
-kexec('top'); //your process now becomes top, can also accept parameters in one string
+kexec('top') //your process now becomes top, can also accept parameters in one string
 ```
 
 ```javascript
-var kexec = require('kexec');
+var kexec = require('kexec')
 
-kexec('du', [ '-sh', '/etc/fstab' ]); //your process now becomes du, with the arguments indicated
+kexec('du', [ '-sh', '/etc/fstab' ]) //your process now becomes du, with the arguments indicated
 ```
 
 
