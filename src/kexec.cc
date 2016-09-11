@@ -1,6 +1,3 @@
-
-#include <v8.h>
-#include <node.h>
 #include <cstdio>
 #include <stdlib.h>
 #include <string.h>
@@ -14,8 +11,17 @@
 #include <process.h>
 #endif*/
 
-using namespace node;
-using namespace v8;
+#include <nan.h>
+
+
+using v8::Array;
+using v8::FunctionTemplate;
+using v8::Handle;
+using v8::Integer;
+using v8::Local;
+using v8::Object;
+using v8::String;
+
 
 static int clear_cloexec (int desc)
 {
@@ -35,15 +41,8 @@ static int do_exec(char *argv[])
         return execvp(argv[0], argv);
 }
 
-#if defined(__NODE_V0_10__)
-static Handle<Value> kexec(const Arguments& args) {
-    HandleScope scope;
-#else
-static void kexec(const FunctionCallbackInfo<Value>& args) {
-    Isolate* isolate = Isolate::GetCurrent();
-    HandleScope scope(isolate);
-#endif
-
+NAN_METHOD(kexec) {
+    Nan::HandleScope scope;
 
     /*
      * Steve Blott: 17 Jan, 2014
@@ -64,42 +63,32 @@ static void kexec(const FunctionCallbackInfo<Value>& args) {
      * established API.
      */
 
-    if ( 1 == args.Length() && args[0]->IsString() )
+    if ( 1 == info.Length() && info[0]->IsString() )
     {
-        String::Utf8Value v8str(args[0]);
-        char* argv[] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), *v8str, NULL};
+        String::Utf8Value str(info[0]);
+        char* argv[] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), *str, NULL};
 
         int err = do_exec(argv);
 
-#if defined(__NODE_V0_10__)
-        Local<Number> num = Number::New(err);
-        return scope.Close(num/*Undefined()*/);
-#else
-        Local<Number> num = Number::New(isolate, err);
-        args.GetReturnValue().Set(num);
-#endif
+        info.GetReturnValue().Set(Nan::New<Integer>(err));
     }
 
-    if ( 2 == args.Length() && args[0]->IsString() && args[1]->IsArray() )
+    if ( 2 == info.Length() && info[0]->IsString() && info[1]->IsArray() )
     {
-        String::Utf8Value v8str(args[0]);
+        String::Utf8Value str(info[0]);
 
         // Substantially copied from:
         // https://github.com/joyent/node/blob/2944e03/src/node_child_process.cc#L92-104
-        Local<Array> argv_handle = Local<Array>::Cast(args[1]);
+        Local<Array> argv_handle = Local<Array>::Cast(info[1]);
         int argc = argv_handle->Length();
 
         int argv_length = argc + 1 + 1;
         char **argv = new char*[argv_length];
 
-        argv[0] = *v8str;
+        argv[0] = *str;
         argv[argv_length-1] = NULL;
         for (int i = 0; i < argc; i++) {
-#if defined(__NODE_V0_10__)
-          String::Utf8Value arg(argv_handle->Get(Integer::New(i))->ToString());
-#else
-          String::Utf8Value arg(argv_handle->Get(Integer::New(isolate, i))->ToString());
-#endif
+            String::Utf8Value arg(argv_handle->Get(Nan::New<Integer>(i))->ToString());
             argv[i+1] = strdup(*arg);
         }
 
@@ -111,28 +100,20 @@ static void kexec(const FunctionCallbackInfo<Value>& args) {
             free(argv[i+1]);
         delete [] argv;
 
-#if defined(__NODE_V0_10__)
-        Local<Number> num = Number::New(err);
-        return scope.Close(num/*Undefined()*/);
-#else
-        Local<Number> num = Number::New(isolate, err);
-        args.GetReturnValue().Set(num);
-#endif
+        info.GetReturnValue().Set(Nan::New<Integer>(err));
     }
 
-#if defined(__NODE_V0_10__)
-    ThrowException(Exception::TypeError(String::New("kexec: invalid arguments")));
-    return scope.Close(Undefined());
-#else
-    isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "kexec: invalid arguments")));
-    args.GetReturnValue().Set(Undefined(isolate));
-#endif
+    return Nan::ThrowTypeError("kexec: invalid arguments");
 }
 
-extern "C" {
-    static void init (Handle<Object> target) {
-        NODE_SET_METHOD(target, "kexec", kexec);
-    }
 
-    NODE_MODULE(kexec, init);
+#define EXPORT(name, symbol) exports->Set( \
+  Nan::New<String>(name).ToLocalChecked(), \
+  Nan::New<FunctionTemplate>(symbol)->GetFunction() \
+)
+
+void init (Handle<Object> exports) {
+    EXPORT("kexec", kexec);
 }
+
+NODE_MODULE(kexec, init);

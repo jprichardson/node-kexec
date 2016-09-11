@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/jprichardson/node-kexec"
   },
+  "scripts": {
+    "test": "mocha"
+  },
   "keywords": [
     "exec",
     "spawn",
@@ -21,5 +24,8 @@
   },
   "devDependencies": {
     "mocha": "^2.3.3"
+  },
+  "dependencies": {
+    "nan": "^2.4.0"
   }
 }
