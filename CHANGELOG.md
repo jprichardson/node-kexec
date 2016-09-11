@@ -1,3 +1,9 @@
+3.0.0 / 2016-09-11
+------------------
+- port to NaN [#31]
+- change JS style to Standard
+- dropped official support for Node v0.10
+
 2.0.2 / 2015-11-27
 ------------------
 - fix build in Make: See: https://github.com/jprichardson/node-kexec/pull/28
