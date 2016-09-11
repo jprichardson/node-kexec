@@ -1,6 +1,9 @@
 Node.js - kexec
 ===============
 
+[![npm Package](https://img.shields.io/npm/v/kexec.svg?style=flat-square)](https://www.npmjs.org/package/kexec)
+[![build status](https://api.travis-ci.org/jprichardson/node-kexec.svg)](http://travis-ci.org/jprichardson/node-kexec)
+
 This module causes your current Node.js process to be replaced by the process invoked by the parameter of this function. It's like the Ruby exec function. It currently does not work on Windows.
 
 Fully compatible with Node.js version v0.10 and v0.11.
@@ -48,6 +51,3 @@ License
 (The MIT License)
 
 Copyright (c) 2011-2015 JP Richardson
-
-
-
