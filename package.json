@@ -8,7 +8,8 @@
     "url": "https://github.com/jprichardson/node-kexec"
   },
   "os": [
-    "darwin"
+    "darwin",
+    "linux"
   ],
   "scripts": {
     "lint": "standard",
