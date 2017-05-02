@@ -7,6 +7,9 @@
     "type": "git",
     "url": "https://github.com/jprichardson/node-kexec"
   },
+  "os": [
+    "darwin"
+  ],
   "scripts": {
     "lint": "standard",
     "test": "npm run lint && npm run unit",
