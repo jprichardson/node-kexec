@@ -18,6 +18,7 @@
     "process",
     "kexec"
   ],
+  "os" : [ "!win32" ],
   "author": "JP Richardson <jprichardson@gmail.com>",
   "license": "MIT",
   "main": "./index",
