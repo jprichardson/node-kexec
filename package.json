@@ -29,6 +29,6 @@
     "standard": "^8.0.0"
   },
   "dependencies": {
-    "nan": "^2.4.0"
+    "nan": "^2.13.2"
   }
 }

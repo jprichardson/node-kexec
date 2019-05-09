@@ -15,12 +15,14 @@
 
 
 using v8::Array;
+using v8::Context;
 using v8::FunctionTemplate;
-using v8::Handle;
 using v8::Integer;
+using v8::Isolate;
 using v8::Local;
 using v8::Object;
 using v8::String;
+using v8::Value;
 
 
 static int clear_cloexec (int desc)
@@ -41,6 +43,16 @@ static int do_exec(char *argv[])
         return execvp(argv[0], argv);
 }
 
+// The isolate argument to String::Utf8Value was introduced in V8 6.2.396
+// (https://github.com/v8/v8/commit/fe598532ec1317e8b85343133be9fb708e07bd2e),
+// and became mandatory in V8 7.0.160
+// (https://github.com/v8/v8/commit/5414884aec08a936fbdb51eb699933523c1a2780).
+#if V8_MAJOR_VERSION > 6 || (V8_MAJOR_VERSION == 6 && V8_MINOR_VERSION >= 3)
+#define DECLARE_STRING(NAME, FROM) String::Utf8Value NAME(Isolate::GetCurrent(), FROM)
+#else
+#define DECLARE_STRING(NAME, FROM) String::Utf8Value NAME(FROM)
+#endif
+
 NAN_METHOD(kexec) {
     /*
      * Steve Blott: 17 Jan, 2014
@@ -60,10 +72,10 @@ NAN_METHOD(kexec) {
      * coexist with direct execvp-usage, and avoids making any changes to the
      * established API.
      */
-
     if ( 1 == info.Length() && info[0]->IsString() )
     {
-        String::Utf8Value str(info[0]);
+        DECLARE_STRING(str, info[0]);
+
         char* argv[] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), *str, NULL};
 
         int err = do_exec(argv);
@@ -73,7 +85,7 @@ NAN_METHOD(kexec) {
 
     if ( 2 == info.Length() && info[0]->IsString() && info[1]->IsArray() )
     {
-        String::Utf8Value str(info[0]);
+        DECLARE_STRING(str, info[0]);
 
         // Substantially copied from:
         // https://github.com/joyent/node/blob/2944e03/src/node_child_process.cc#L92-104
@@ -86,7 +98,10 @@ NAN_METHOD(kexec) {
         argv[0] = *str;
         argv[argv_length-1] = NULL;
         for (int i = 0; i < argc; i++) {
-            String::Utf8Value arg(argv_handle->Get(Nan::New<Integer>(i))->ToString());
+            Local<Context> context = Nan::GetCurrentContext();
+            Local<Value> n =
+                argv_handle->Get(context, Nan::New<Integer>(i)).ToLocalChecked();
+            DECLARE_STRING(arg, n->ToString(context).ToLocalChecked());
             argv[i+1] = strdup(*arg);
         }
 
@@ -104,14 +119,13 @@ NAN_METHOD(kexec) {
     return Nan::ThrowTypeError("kexec: invalid arguments");
 }
 
-
-#define EXPORT(name, symbol) exports->Set( \
-  Nan::New<String>(name).ToLocalChecked(), \
-  Nan::New<FunctionTemplate>(symbol)->GetFunction() \
-)
-
-void init (Handle<Object> exports) {
-    EXPORT("kexec", kexec);
+void init (Local<Object> exports,
+           Local<Value> module) {
+    Local<Context> context = Nan::GetCurrentContext();
+    Local<Value> name = Nan::New<String>("kexec").ToLocalChecked();
+    Local<Value> method =
+        Nan::New<FunctionTemplate>(kexec)->GetFunction(context).ToLocalChecked();
+    exports->Set(context, name, method).FromJust();
 }
 
 NODE_MODULE(kexec, init);
