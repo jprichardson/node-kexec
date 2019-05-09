@@ -15,12 +15,14 @@
 
 
 using v8::Array;
+using v8::Context;
 using v8::FunctionTemplate;
-using v8::Handle;
 using v8::Integer;
+using v8::Isolate;
 using v8::Local;
 using v8::Object;
 using v8::String;
+using v8::Value;
 
 
 static int clear_cloexec (int desc)
@@ -61,9 +63,11 @@ NAN_METHOD(kexec) {
      * established API.
      */
 
+    Isolate* isolate = Isolate::GetCurrent();
+
     if ( 1 == info.Length() && info[0]->IsString() )
     {
-        String::Utf8Value str(info[0]);
+        String::Utf8Value str(isolate, info[0]);
         char* argv[] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), *str, NULL};
 
         int err = do_exec(argv);
@@ -73,7 +77,7 @@ NAN_METHOD(kexec) {
 
     if ( 2 == info.Length() && info[0]->IsString() && info[1]->IsArray() )
     {
-        String::Utf8Value str(info[0]);
+        String::Utf8Value str(isolate, info[0]);
 
         // Substantially copied from:
         // https://github.com/joyent/node/blob/2944e03/src/node_child_process.cc#L92-104
@@ -86,7 +90,10 @@ NAN_METHOD(kexec) {
         argv[0] = *str;
         argv[argv_length-1] = NULL;
         for (int i = 0; i < argc; i++) {
-            String::Utf8Value arg(argv_handle->Get(Nan::New<Integer>(i))->ToString());
+            Local<Context> context = Nan::GetCurrentContext();
+            Local<Value> n =
+                argv_handle->Get(context, Nan::New<Integer>(i)).ToLocalChecked();
+            String::Utf8Value arg(isolate, n->ToString(context).ToLocalChecked());
             argv[i+1] = strdup(*arg);
         }
 
@@ -104,14 +111,13 @@ NAN_METHOD(kexec) {
     return Nan::ThrowTypeError("kexec: invalid arguments");
 }
 
-
-#define EXPORT(name, symbol) exports->Set( \
-  Nan::New<String>(name).ToLocalChecked(), \
-  Nan::New<FunctionTemplate>(symbol)->GetFunction() \
-)
-
-void init (Handle<Object> exports) {
-    EXPORT("kexec", kexec);
+void init (Local<Object> exports,
+           Local<Value> module) {
+    Local<Context> context = Nan::GetCurrentContext();
+    Local<Value> name = Nan::New<String>("kexec").ToLocalChecked();
+    Local<Value> method =
+        Nan::New<FunctionTemplate>(kexec)->GetFunction(context).ToLocalChecked();
+    exports->Set(context, name, method).FromJust();
 }
 
 NODE_MODULE(kexec, init);
