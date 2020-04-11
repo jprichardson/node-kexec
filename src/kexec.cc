@@ -1,117 +1,90 @@
-#include <cstdio>
-#include <stdlib.h>
-#include <string.h>
-#if defined(__NODE_V0_11_OR_12__) || defined(__NODE_GE_V4__)
-#include <fcntl.h>
-#endif
+#include <napi.h>
 
-//#ifdef __POSIX__
+#include <sstream>
+#include <string>
+#include <vector>
+
 #include <unistd.h>
-/*#else
-#include <process.h>
-#endif*/
+#include <fcntl.h>
 
-#include <nan.h>
-
-
-using v8::Array;
-using v8::FunctionTemplate;
-using v8::Handle;
-using v8::Integer;
-using v8::Local;
-using v8::Object;
-using v8::String;
-
-
-static int clear_cloexec (int desc)
-{
-    int flags = fcntl (desc, F_GETFD, 0);
-    if (flags <  0)
-        return flags; //return if reading failed
-
-    flags &= ~FD_CLOEXEC; //clear FD_CLOEXEC bit
-    return fcntl (desc, F_SETFD, flags);
+static void invalidArgs(Napi::Env env) {
+    Napi::TypeError::New(env, "invalid arguments: expected string or string, Array<string>").ThrowAsJavaScriptException();
 }
 
-static int do_exec(char *argv[])
-{
-        clear_cloexec(0); //stdin
-        clear_cloexec(1); //stdout
-        clear_cloexec(2); //stderr
-        return execvp(argv[0], argv);
+static void operationError(Napi::Env env, const char *operation, int code) {
+   std::ostringstream msg;
+   msg << operation << " failed with code " << code;
+   Napi::Error::New(env, msg.str()).ThrowAsJavaScriptException();
 }
 
-NAN_METHOD(kexec) {
-    /*
-     * Steve Blott: 17 Jan, 2014
-     *              Temporary comment by way of explanation...
-     *              To be deleted.
-     *
-     * With a single argument:
-     *   - pass it to execvp as "sh -c 'args[0]'"
-     *   - this is the existing usage
-     *
-     * With exactly two arguments:
-     *   - the first is the command name
-     *   - the second is an array of arguments
-     *     ...as in process.child_process.spawn()
-     *
-     * This approach is not great, but it allows the established usage to
-     * coexist with direct execvp-usage, and avoids making any changes to the
-     * established API.
-     */
+void Kexec(const Napi::CallbackInfo& info) {
+    Napi::Env env = info.Env();
 
-    if ( 1 == info.Length() && info[0]->IsString() )
-    {
-        String::Utf8Value str(info[0]);
-        char* argv[] = { const_cast<char *>("/bin/sh"), const_cast<char *>("-c"), *str, NULL};
+    if (info.Length() < 1 || info.Length() > 2 || !info[0].IsString()) {
+        invalidArgs(env);
+        return;
+    }
+    // Hold onto a reference to the std::string, to ensure the backing store for the c_str value isn't de-allocated.
+    std::string strCmd = info[0].As<Napi::String>().Utf8Value();
+    char *cmd = const_cast<char*>(strCmd.c_str());
 
-        int err = do_exec(argv);
+    char **argv;
+    if (1 == info.Length()) {
+        argv = new char*[4];
+        argv[0] = const_cast<char *>("/bin/sh");
+        argv[1] = const_cast<char *>("-c");
+        argv[2] = cmd;
+        argv[3] = NULL;
+    } else {
+        if (!info[1].IsArray()) {
+            invalidArgs(env);
+             return;
+        }
+        Napi::Array argsFromJS = info[1].As<Napi::Array>();
+        const int numArgs = argsFromJS.Length();
 
-        info.GetReturnValue().Set(Nan::New<Integer>(err));
+        std::vector<std::string> strArgs(numArgs);
+        argv = new char*[numArgs + 2];
+        argv[0] = cmd;
+        for (int argIdx = 0; argIdx < numArgs; ++argIdx) {
+            Napi::Value arg = argsFromJS[argIdx];
+            if (!arg.IsString()) {
+                invalidArgs(env);
+                return;
+            }
+            strArgs[argIdx] = arg.As<Napi::String>().Utf8Value();
+            argv[argIdx + 1] = const_cast<char *>(strArgs[argIdx].c_str());
+        }
+        argv[numArgs + 1] = NULL;
     }
 
-    if ( 2 == info.Length() && info[0]->IsString() && info[1]->IsArray() )
-    {
-        String::Utf8Value str(info[0]);
-
-        // Substantially copied from:
-        // https://github.com/joyent/node/blob/2944e03/src/node_child_process.cc#L92-104
-        Local<Array> argv_handle = Local<Array>::Cast(info[1]);
-        int argc = argv_handle->Length();
-
-        int argv_length = argc + 1 + 1;
-        char **argv = new char*[argv_length];
-
-        argv[0] = *str;
-        argv[argv_length-1] = NULL;
-        for (int i = 0; i < argc; i++) {
-            String::Utf8Value arg(argv_handle->Get(Nan::New<Integer>(i))->ToString());
-            argv[i+1] = strdup(*arg);
+    // Run setfd on descriptors 0 through 2
+    for (int descriptor = 0; descriptor <= 2; ++descriptor) {
+        int flags = fcntl (descriptor, F_GETFD, 0);
+        if (flags <  0) {
+            operationError(env, "fcntl GETFD", flags);
+            return;
         }
 
-        int err = do_exec(argv);
-
-        // Failed...!
-        // FIXME: It might be better to raise an exception here.
-        for (int i = 0; i < argc; i++)
-            free(argv[i+1]);
-        delete [] argv;
-
-        info.GetReturnValue().Set(Nan::New<Integer>(err));
+        flags &= ~FD_CLOEXEC; //clear FD_CLOEXEC bit
+        int setfdErrCode = fcntl (descriptor, F_SETFD, flags);
+        if (setfdErrCode) {
+            operationError(env, "fcntl SETFD", setfdErrCode);
+            return;
+        }
     }
 
-    return Nan::ThrowTypeError("kexec: invalid arguments");
+    int execvpErrCode = execvp(argv[0], argv);
+
+    // Because of the exec, we only get here if there's a failure.
+    delete [] argv;
+
+    operationError(env, "execvp", execvpErrCode);
 }
 
-
-#define EXPORT(name, symbol) exports->Set( \
-  Nan::New<String>(name).ToLocalChecked(), \
-  Nan::New<FunctionTemplate>(symbol)->GetFunction() \
-)
-
-void init (Handle<Object> exports) {
-    EXPORT("kexec", kexec);
+Napi::Object Init(Napi::Env env, Napi::Object exports) {
+  exports.Set(Napi::String::New(env, "kexec"), Napi::Function::New(env, Kexec));
+  return exports;
 }
 
-NODE_MODULE(kexec, init);
+NODE_API_MODULE(kexec, Init)
