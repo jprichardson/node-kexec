@@ -1,16 +1,17 @@
 {
-  "name": "kexec",
-  "version": "3.0.0",
+  "name": "@jcoreio/kexec",
+  "version": "0.0.0-development",
   "description": "Replace your Node.js process with another process. Like Ruby exec.",
-  "homepage": "https://github.com/jprichardson/node-kexec",
+  "homepage": "https://github.com/jcoreio/kexec",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jprichardson/node-kexec"
+    "url": "https://github.com/jcoreio/kexec"
   },
   "scripts": {
     "lint": "standard",
     "test": "npm run lint && npm run unit",
-    "unit": "mocha"
+    "unit": "mocha",
+    "semantic-release": "semantic-release"
   },
   "keywords": [
     "exec",
@@ -22,13 +23,15 @@
   "license": "MIT",
   "main": "./index",
   "engines": {
-    "node": ">=0.10"
+    "node": ">=8"
   },
   "devDependencies": {
-    "mocha": "^2.3.3",
-    "standard": "^8.0.0"
+    "mocha": "^7.1.1",
+    "semantic-release": "^17.0.4",
+    "standard": "^14.3.3"
   },
   "dependencies": {
-    "nan": "^2.4.0"
+    "bindings": "^1.5.0",
+    "node-addon-api": "^2.0.0"
   }
 }
