@@ -22,13 +22,14 @@
   "license": "MIT",
   "main": "./index",
   "engines": {
-    "node": ">=0.10"
+    "node": ">=8"
   },
   "devDependencies": {
-    "mocha": "^2.3.3",
-    "standard": "^8.0.0"
+    "mocha": "^7.1.1",
+    "standard": "^14.3.3"
   },
   "dependencies": {
-    "nan": "^2.4.0"
+    "bindings": "^1.5.0",
+    "node-addon-api": "^2.0.0"
   }
 }

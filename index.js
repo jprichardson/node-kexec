@@ -1,1 +1,1 @@
-module.exports = require('./build/Release/kexec.node').kexec
+module.exports = require('bindings')('kexec.node').kexec
