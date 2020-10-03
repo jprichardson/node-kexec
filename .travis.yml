@@ -1,5 +1,6 @@
-sudo: false
 language: node_js
+os: linux
+dist: bionic
 node_js:
   - "14"
   - "12"
