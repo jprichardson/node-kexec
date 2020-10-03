@@ -7,8 +7,6 @@ Node.js - kexec
 
 This module causes your current Node.js process to be replaced by the process invoked by the parameter of this function. It's like the Ruby exec function. It currently does not work on Windows.
 
-Fully compatible with Node.js version v0.10 and v0.11.
-
 
 Usage
 -----
