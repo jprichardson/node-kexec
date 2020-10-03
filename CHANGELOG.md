@@ -1,6 +1,6 @@
-4.0.0 / 2020-04-10
+4.0.0 / 2020-10-03
 ------------------
-- add support for node 12 and node 13
+- add support for node 12, 13 and 14
 - drop support for all node versions before 8
 - port from NaN to node-addon-api
 - throw JS errors for all system call failures
