@@ -1,11 +1,11 @@
 {
-  "name": "@jcoreio/kexec",
+  "name": "kexec",
   "version": "4.0.0",
   "description": "Replace your Node.js process with another process. Like Ruby exec.",
-  "homepage": "https://github.com/jcoreio/kexec",
+  "homepage": "https://github.com/jprichardson/node-kexec",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jcoreio/kexec"
+    "url": "https://github.com/jprichardson/node-kexec"
   },
   "scripts": {
     "lint": "standard",
