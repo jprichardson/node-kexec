@@ -1,3 +1,11 @@
+4.0.0 / 2020-10-03
+------------------
+- add support for Node 12 and 14
+- drop support for all Node versions before 10 and Node 11
+- port from NaN to node-addon-api
+- throw JS errors for all system call failures
+- updated Mocha tests
+
 3.0.0 / 2016-09-11
 ------------------
 - port to NaN [#31]
